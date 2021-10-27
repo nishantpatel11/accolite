@@ -6,7 +6,7 @@ pipeline {
         NEW_VERSION = '1.3.0'
     }
     stages{
-        stage('build'){
+        stage("build"){
             step{
                 when{
                     expression {
@@ -14,18 +14,30 @@ pipeline {
                     }
                 }
 
-                echo 'Building the application'
+                echo 'Building the application ....'
             }
         }
-        stage('test'){
+        stage("test"){
             step{
-                echo 'Testing the application'
+                echo 'Testing the application ....'
             }
         }
-        stage('deploy'){
+        stage("deploy"){
             step{
-                echo 'Deploying the application'
+                echo 'Deploying the application .....'
             }
+        }
+    }
+
+    post{
+        always{
+            echo 'Post Action perform the application........'
+        }
+        success{
+            echo 'Build success ..........'
+        }
+        failure{
+            echo 'Build failure ........'
         }
     }
 }
