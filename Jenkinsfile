@@ -7,7 +7,7 @@ pipeline {
     }
     stages{
         stage("build"){
-            steps {
+            step{
                 when{
                     expression {
                         BRANCH_NAME == 'master' || CODE_CHANGES ==true
@@ -18,12 +18,12 @@ pipeline {
             }
         }
         stage("test"){
-            steps {
+            step{
                 echo 'Testing the application ....'
             }
         }
         stage("deploy"){
-            steps {
+            step{
                 echo 'Deploying the application .....'
             }
         }
