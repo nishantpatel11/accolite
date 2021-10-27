@@ -2,19 +2,37 @@ CODE_CHANGES = true
 
 pipeline {
     agent any
+    tools {
+            maven 'Maven 3.3.9'
+            jdk 'jdk8'
+    }
     environment {
         NEW_VERSION = '1.3.0'
     }
     stages{
-        stage("build"){
+        stage ('Initialize') {
             steps {
-//                 when{
-//                     expression {
-//                         BRANCH_NAME == 'master' || CODE_CHANGES ==true
-//                     }
-//                 }
-
+                    sh '''
+                        echo "PATH = ${PATH}"
+                        echo "M2_HOME = ${M2_HOME}"
+                    '''
+            }
+        }
+        stage("build"){
+            when{
+                expression {
+                    BRANCH_NAME == 'master' || CODE_CHANGES ==true
+                   }
+                }
+            steps {
                 echo 'Building the application ....'
+                sh 'mvn -Dmaven.test.failure.ignore=true install'
+                echo 'Building the application has completed ......'
+            }
+            post {
+                success {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
             }
         }
         stage("test"){
