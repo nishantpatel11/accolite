@@ -1,10 +1,20 @@
+CODE_CHANGES = true
+
 pipeline {
     agent any
+    environment {
+        NEW_VERSION = '1.3.0'
+    }
     stages{
         stage('build'){
             step{
-                echo 'Building the application'
+                when{
+                    expression {
+                        BRANCH_NAME == 'master' || CODE_CHANGES ==true
+                    }
+                }
 
+                echo 'Building the application'
             }
         }
         stage('test'){
@@ -17,6 +27,5 @@ pipeline {
                 echo 'Deploying the application'
             }
         }
-
     }
 }
