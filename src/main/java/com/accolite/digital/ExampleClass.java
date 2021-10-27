@@ -5,8 +5,12 @@ import com.accolite.service.EmployeeService;
 import com.accolite.service.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+
+
 
 public class ExampleClass {
 
@@ -35,8 +39,25 @@ public class ExampleClass {
         employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
 
 
-        List<Employee> allEmployeeJoiningDate = employeeService.findAllEmployeeJoiningDate(employeeList,2017);
-        allEmployeeJoiningDate.forEach(System.out::println);
+//        List<Employee> allEmployeeJoiningDate = employeeService.findAllEmployeeJoiningDate(employeeList,2017);
+//        allEmployeeJoiningDate.forEach(System.out::println);
+
+
+        List<String> list = employeeList.stream().map(Employee :: getName).collect(Collectors.toList());
+
+        Map<String, List<String>> map1 = employeeList.stream().collect(Collectors.groupingBy(Employee::getGender,LinkedHashMap::new, Collectors.mapping(Employee::getName,Collectors.toList())));
+        Map<String, Long> map = list.stream().collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+        map.entrySet().forEach(System.out::println);
+        System.out.print(map1);
+        System.out.println();
+        System.out.println(list.stream().max(Comparator.comparing(String::valueOf)).get());
+        System.out.println(list.stream().max(Comparator.comparing(String::valueOf)).isPresent());
+        Employee emp = null;
+        Optional<Employee> emp1 = Optional.ofNullable(emp);
+        System.out.println(emp);
+        emp1.ifPresent(System.out::println);
+
+        emp1.orElseGet( () -> new Employee());
 
 
     }
